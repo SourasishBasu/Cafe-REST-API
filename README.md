@@ -39,9 +39,5 @@ A Flask based REST API serving detailed information about cafes within London.
   python app.py
   ```
 
-# Usage
-
-Check out the API docs and try it out in [Postman](https://documenter.getpostman.com/view/32019277/2sA3JRafGo).
-  
-  
-
+> [!TIP]
+> Check out the API docs and try sending requests to the routes in [Postman](https://documenter.getpostman.com/view/32019277/2sA3JRafGo).
