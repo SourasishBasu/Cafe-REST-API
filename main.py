@@ -99,7 +99,7 @@ def change_data(cafe_id):
 # HTTP DELETE - Delete Record
 @app.route("/delete/<cafe_id>", methods=["DELETE"])
 def del_cafe(cafe_id):
-    if request.args.get("key") == "valid_key":
+    if request.args.get("key") == "valid_key": # Change secret API key for validation during DELETE operation here
         cafe = Cafe.query.get(cafe_id)
         if cafe:
             db.session.delete(cafe)
