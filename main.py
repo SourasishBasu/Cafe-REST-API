@@ -9,7 +9,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cafes.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-
 ##Cafe TABLE Configuration
 class Cafe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -29,16 +28,7 @@ class Cafe(db.Model):
 def home():
     return render_template("index.html")
 
-@app.route("/random")
-def get_random_cafe():
-    rand_id = random.randint(1,21)
-    cafe = Cafe.query.get(rand_id)
-    return jsonify(cafe={"can_take_calls": cafe.can_take_calls, "coffee_price":cafe.coffee_price, "has_sockets":cafe.has_sockets,
-                         "has_toilet":cafe.has_toilet, "has_wifi":cafe.has_toilet, "id":cafe.id, "img_url":cafe.img_url,
-                         "location":cafe.location, "map_url":cafe.map_url, "name":cafe.name, "seats":cafe.seats,})
-
-
-# HTTP GET - Read Record
+# HTTP GET - Read Records
 @app.route("/all")
 def get_all_cafes():
     cafes = db.session.query(Cafe).all()
@@ -69,6 +59,15 @@ def search_cafe():
         return jsonify(all_cafes)
 
 
+@app.route("/random")
+def get_random_cafe():
+    rand_id = random.randint(1,21) 
+    cafe = Cafe.query.get(rand_id)
+    return jsonify(cafe={"can_take_calls": cafe.can_take_calls, "coffee_price":cafe.coffee_price, "has_sockets":cafe.has_sockets,
+                         "has_toilet":cafe.has_toilet, "has_wifi":cafe.has_toilet, "id":cafe.id, "img_url":cafe.img_url,
+                         "location":cafe.location, "map_url":cafe.map_url, "name":cafe.name, "seats":cafe.seats,})
+
+
 # HTTP POST - Create Record
 @app.route("/add", methods=["POST"])
 def create_record():
@@ -82,7 +81,8 @@ def create_record():
         db.session.commit()
         return jsonify({"response": {"Success": "Successfully added the new cafe"}})
 
-# HTTP PUT/PATCH - Update Record
+
+# HTTP PATCH - Update Record
 @app.route("/update/<cafe_id>", methods=["PATCH"])
 def change_data(cafe_id):
     new_price = request.args.get("new_price")
@@ -93,7 +93,7 @@ def change_data(cafe_id):
         return jsonify({"success": "Successfully updated the price."}), 200
     else:
 
-        return jsonify({"error": {"Not Found": "Sorry a cafe with that ID was not found in the Cafe database"}}), 404
+        return jsonify({"error": {"Not Found": "Sorry a cafe with that ID was not found in the Cafe database"}}), 404 # Return custom error code
 
 
 # HTTP DELETE - Delete Record
@@ -112,4 +112,4 @@ def del_cafe(cafe_id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000) # Change port here
